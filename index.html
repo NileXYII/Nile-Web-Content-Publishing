@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nile Web Content Publishing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .pulse-slow {
+            animation: pulse-slow 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-pattern {
+            background-image: 
+                radial-gradient(circle at 25px 25px, rgba(255,255,255,0.1) 2px, transparent 0),
+                radial-gradient(circle at 75px 75px, rgba(255,255,255,0.1) 2px, transparent 0);
+            background-size: 100px 100px;
+        }
+        
+        .card-glow {
+            box-shadow: 0 0 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .slide-in-up {
+            animation: slideInUp 0.8s ease-out forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        
+        .logo-placeholder {
+            background: linear-gradient(45deg, #f0f9ff, #e0f2fe);
+            border: 2px dashed #0ea5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0369a1;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .logo-placeholder:hover {
+            background: linear-gradient(45deg, #e0f2fe, #bae6fd);
+            border-color: #0284c7;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white overflow-x-hidden">
+    <!-- Hero Section -->
+    <div class="min-h-screen gradient-bg hero-pattern relative overflow-hidden">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating"></div>
+            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating" style="animation-delay: -2s;"></div>
+            <div class="absolute top-1/2 left-1/2 w-60 h-60 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating" style="animation-delay: -4s;"></div>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="relative z-10 p-6">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="text-2xl font-bold tracking-tight">
+                    <span class="text-white">Nile</span>
+                    <span class="text-purple-200">Web</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#about" class="text-white/80 hover:text-white transition-colors">About</a>
+                    <a href="#websites" class="text-white/80 hover:text-white transition-colors">Websites</a>
+                    <a href="#contact" class="text-white/80 hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Hero Content -->
+        <div class="relative z-10 flex items-center justify-center min-h-screen -mt-20">
+            <div class="text-center px-6 max-w-4xl mx-auto">
+                <h1 class="text-6xl md:text-8xl font-bold mb-6 slide-in-up">
+                    <span class="block">Nile Web</span>
+                    <span class="block text-gradient">Content Publishing</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-white/80 mb-12 max-w-2xl mx-auto slide-in-up delay-1">
+                    Crafting digital experiences that inspire, engage, and transform the way people connect with content
+                </p>
+                <div class="slide-in-up delay-2">
+                    <a href="#websites" class="inline-block bg-white/20 glass-morphism px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105">
+                        Explore Our Ecosystem
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-gray-900 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-gray-800/50 to-gray-900"></div>
+        <div class="max-w-6xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold mb-6 text-gradient">Redefining Digital Publishing</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    At Nile Web Content Publishing, we're pioneering the future of digital content creation and distribution through innovative platforms that empower creators and captivate audiences.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-morphism rounded-2xl p-8 text-center hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Innovation First</h3>
+                    <p class="text-gray-300">Cutting-edge technology meets creative vision to deliver unparalleled digital experiences.</p>
+                </div>
+                
+                <div class="glass-morphism rounded-2xl p-8 text-center hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-600 rounded-xl mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Scalable Solutions</h3>
+                    <p class="text-gray-300">From startups to enterprises, our platforms grow with your ambitions and adapt to your needs.</p>
+                </div>
+                
+                <div class="glass-morphism rounded-2xl p-8 text-center hover-lift">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Quality Focused</h3>
+                    <p class="text-gray-300">Every pixel, every interaction, every experience is crafted with meticulous attention to detail.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Websites Section -->
+    <section id="websites" class="py-24 bg-gradient-to-b from-gray-900 to-gray-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-5xl font-bold mb-6 text-gradient">Our Digital Ecosystem</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Discover three distinct platforms, each designed to push the boundaries of what's possible in digital content and technology.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Inplied Tech -->
+                <div class="glass-morphism rounded-3xl overflow-hidden hover-lift card-glow group">
+                    <div class="p-8">
+                        <div class="logo-placeholder w-full h-48 rounded-2xl mb-6">
+                            <span class="text-sm">Logo Placeholder<br/>Inplied Tech</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4 group-hover:text-blue-400 transition-colors">Inplied Tech</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Where technology meets intuition. Cutting-edge solutions that understand your needs before you do, powered by advanced AI and seamless user experiences.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-sm">AI-Powered</span>
+                            <span class="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-sm">Intuitive</span>
+                            <span class="bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-sm">Advanced</span>
+                        </div>
+                        <a href="#" class="inline-flex items-center text-blue-400 hover:text-blue-300 font-semibold group-hover:translate-x-2 transition-all duration-300">
+                            Explore Platform
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Pixel Byte -->
+                <div class="glass-morphism rounded-3xl overflow-hidden hover-lift card-glow group">
+                    <div class="p-8">
+                        <div class="logo-placeholder w-full h-48 rounded-2xl mb-6">
+                            <span class="text-sm">Logo Placeholder<br/>Pixel Byte</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4 group-hover:text-purple-400 transition-colors">Pixel Byte</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Digital artistry meets technical precision. A creative playground where every pixel tells a story and every byte carries infinite possibilities for visual innovation.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-sm">Creative</span>
+                            <span class="bg-pink-500/20 text-pink-300 px-3 py-1 rounded-full text-sm">Visual</span>
+                            <span class="bg-orange-500/20 text-orange-300 px-3 py-1 rounded-full text-sm">Innovative</span>
+                        </div>
+                        <a href="#" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold group-hover:translate-x-2 transition-all duration-300">
+                            Explore Platform
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Nile Ecosystem -->
+                <div class="glass-morphism rounded-3xl overflow-hidden hover-lift card-glow group">
+                    <div class="p-8">
+                        <div class="logo-placeholder w-full h-48 rounded-2xl mb-6">
+                            <span class="text-sm">Logo Placeholder<br/>Nile Ecosystem</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4 group-hover:text-green-400 transition-colors">Nile Ecosystem</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            The confluence of all digital streams. A comprehensive ecosystem that connects, nurtures, and amplifies content across all platforms in perfect harmony.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-sm">Integrated</span>
+                            <span class="bg-teal-500/20 text-teal-300 px-3 py-1 rounded-full text-sm">Scalable</span>
+                            <span class="bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full text-sm">Connected</span>
+                        </div>
+                        <a href="#" class="inline-flex items-center text-green-400 hover:text-green-300 font-semibold group-hover:translate-x-2 transition-all duration-300">
+                            Explore Platform
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 gradient-bg relative overflow-hidden">
+        <div class="absolute inset-0 hero-pattern opacity-30"></div>
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <h2 class="text-5xl font-bold mb-6">Ready to Transform Your Digital Presence?</h2>
+            <p class="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
+                Join the future of digital content publishing. Let's create something extraordinary together.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="mailto:hello@nilewebcontent.com" class="glass-morphism px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105 hover-lift">
+                    Get In Touch
+                </a>
+                <a href="#" class="bg-white/20 px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/30 transition-all duration-300 hover:scale-105">
+                    View Portfolio
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12 border-t border-gray-800">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-2xl font-bold mb-6 md:mb-0">
+                    <span class="text-white">Nile</span>
+                    <span class="text-purple-400">Web</span>
+                </div>
+                <div class="flex space-x-8 text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
+                    <a href="#" class="hover:text-white transition-colors">Support</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Nile Web Content Publishing. Crafting the future of digital content.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Add scroll-triggered animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe elements for scroll animations
+        document.querySelectorAll('.hover-lift').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(el);
+        });
+        
+        // Parallax effect for floating elements
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.floating');
+            
+            parallaxElements.forEach((el, index) => {
+                const speed = 0.1 + (index * 0.05);
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+        
+        // Dynamic gradient background
+        let gradientAngle = 135;
+        setInterval(() => {
+            gradientAngle += 0.5;
+            const hero = document.querySelector('.gradient-bg');
+            if (hero) {
+                hero.style.background = `linear-gradient(${gradientAngle}deg, #667eea 0%, #764ba2 100%)`;
+            }
+        }, 100);
+    </script>
+</bo
