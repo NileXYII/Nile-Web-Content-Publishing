@@ -25,12 +25,13 @@
         .text-google-yellow { color: #fbbc04; }
         .text-google-green { color: #34a853; }
         
-        /* Floating shapes animation */
+        /* Floating shapes animation - MADE BIGGER */
         .floating-shape {
             position: absolute;
             border-radius: 50%;
             animation: float 20s infinite linear;
             opacity: 0.8;
+            z-index: 1;
         }
         
         .floating-shape.triangle {
@@ -41,7 +42,7 @@
         }
         
         .floating-shape.square {
-            border-radius: 8px;
+            border-radius: 12px;
             animation: floatBounce 18s infinite ease-in-out;
         }
         
@@ -82,17 +83,62 @@
             transform: translateY(-4px);
         }
         
-        /* Google-style buttons */
+        /* IMPROVED Google-style buttons with better visibility */
         .google-btn {
             border-radius: 24px;
             font-weight: 500;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            border: none;
+            min-height: 48px;
+            outline: none;
         }
         
         .google-btn:hover {
             box-shadow: 0 4px 16px rgba(0,0,0,0.2);
             transform: translateY(-2px);
+        }
+        
+        .google-btn:focus {
+            outline: 2px solid #4285f4;
+            outline-offset: 2px;
+        }
+        
+        .google-btn:active {
+            transform: translateY(0px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        /* Enhanced button styles for better visibility */
+        .btn-primary {
+            background: linear-gradient(135deg, #4285f4 0%, #3367d6 100%);
+            color: white;
+            border: 2px solid transparent;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3367d6 0%, #2248c7 100%);
+            box-shadow: 0 6px 20px rgba(66, 133, 244, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #5f6368;
+            border: 2px solid #dadce0;
+        }
+        
+        .btn-secondary:hover {
+            background: #f8f9fa;
+            border-color: #4285f4;
+            color: #4285f4;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
         }
         
         /* Slide in animations */
@@ -166,29 +212,41 @@
         .google-search:hover, .google-search:focus-within {
             box-shadow: 0 2px 8px 1px rgba(64,60,67,.24);
         }
+        
+        /* Ripple effect for buttons */
+        @keyframes ripple {
+            to {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body class="bg-white text-gray-800 overflow-x-hidden relative">
     
-    <!-- Floating Shapes Background -->
+    <!-- Floating Shapes Background - MADE BIGGER -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <!-- Circles -->
-        <div class="floating-shape google-blue w-16 h-16" style="top: 10%; left: 5%; animation-delay: 0s;"></div>
-        <div class="floating-shape google-red w-12 h-12" style="top: 20%; right: 15%; animation-delay: -3s;"></div>
-        <div class="floating-shape google-yellow w-20 h-20" style="top: 50%; left: 10%; animation-delay: -6s;"></div>
-        <div class="floating-shape google-green w-14 h-14" style="top: 70%; right: 20%; animation-delay: -9s;"></div>
-        <div class="floating-shape google-purple w-18 h-18" style="top: 30%; right: 5%; animation-delay: -12s;"></div>
-        <div class="floating-shape google-orange w-10 h-10" style="top: 80%; left: 30%; animation-delay: -15s;"></div>
+        <!-- Circles - INCREASED SIZES -->
+        <div class="floating-shape google-blue w-24 h-24" style="top: 10%; left: 5%; animation-delay: 0s;"></div>
+        <div class="floating-shape google-red w-20 h-20" style="top: 20%; right: 15%; animation-delay: -3s;"></div>
+        <div class="floating-shape google-yellow w-32 h-32" style="top: 50%; left: 10%; animation-delay: -6s;"></div>
+        <div class="floating-shape google-green w-28 h-28" style="top: 70%; right: 20%; animation-delay: -9s;"></div>
+        <div class="floating-shape google-purple w-26 h-26" style="top: 30%; right: 5%; animation-delay: -12s;"></div>
+        <div class="floating-shape google-orange w-18 h-18" style="top: 80%; left: 30%; animation-delay: -15s;"></div>
         
-        <!-- Triangles -->
-        <div class="floating-shape triangle" style="top: 15%; left: 70%; animation-delay: -2s; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 26px solid #4285f4;"></div>
-        <div class="floating-shape triangle" style="top: 60%; left: 80%; animation-delay: -8s; border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 20px solid #ea4335;"></div>
-        <div class="floating-shape triangle" style="top: 40%; left: 20%; animation-delay: -14s; border-left: 18px solid transparent; border-right: 18px solid transparent; border-bottom: 30px solid #34a853;"></div>
+        <!-- Triangles - MADE BIGGER -->
+        <div class="floating-shape triangle" style="top: 15%; left: 70%; animation-delay: -2s; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 40px solid #4285f4;"></div>
+        <div class="floating-shape triangle" style="top: 60%; left: 80%; animation-delay: -8s; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 35px solid #ea4335;"></div>
+        <div class="floating-shape triangle" style="top: 40%; left: 20%; animation-delay: -14s; border-left: 30px solid transparent; border-right: 30px solid transparent; border-bottom: 50px solid #34a853;"></div>
         
-        <!-- Squares -->
-        <div class="floating-shape square google-yellow w-12 h-12" style="top: 25%; left: 60%; animation-delay: -4s;"></div>
-        <div class="floating-shape square google-blue w-16 h-16" style="top: 65%; left: 50%; animation-delay: -10s;"></div>
-        <div class="floating-shape square google-red w-8 h-8" style="top: 85%; right: 40%; animation-delay: -16s;"></div>
+        <!-- Squares - MADE BIGGER -->
+        <div class="floating-shape square google-yellow w-20 h-20" style="top: 25%; left: 60%; animation-delay: -4s;"></div>
+        <div class="floating-shape square google-blue w-24 h-24" style="top: 65%; left: 50%; animation-delay: -10s;"></div>
+        <div class="floating-shape square google-red w-16 h-16" style="top: 85%; right: 40%; animation-delay: -16s;"></div>
+        
+        <!-- Additional shapes for more visual interest -->
+        <div class="floating-shape google-green w-22 h-22" style="top: 5%; right: 30%; animation-delay: -18s;"></div>
+        <div class="floating-shape square google-purple w-18 h-18" style="top: 90%; left: 60%; animation-delay: -20s;"></div>
     </div>
     
     <!-- Navigation -->
@@ -217,10 +275,10 @@
                 Crafting digital experiences that inspire, engage, and transform the way people connect with content across the web
             </p>
             <div class="slide-in-up delay-300 flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button class="google-btn bg-google-blue hover:bg-blue-600 text-white px-8 py-4 text-lg font-medium">
+                <button class="google-btn btn-primary px-8 py-4 text-lg font-medium">
                     Explore Our Ecosystem
                 </button>
-                <button class="google-btn bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 px-8 py-4 text-lg font-medium">
+                <button class="google-btn btn-secondary px-8 py-4 text-lg font-medium">
                     Watch Demo
                 </button>
             </div>
@@ -300,7 +358,9 @@
                 <div class="google-card overflow-hidden group">
                     <div class="h-4 google-blue w-full"></div>
                     <div class="p-8">
-                        <img src="1.png" alt="Pixel Byte Logo" class="w-full h-48 rounded-2xl mb-6 object-cover">
+                        <div class="w-full h-48 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl mb-6 flex items-center justify-center">
+                            <div class="text-4xl font-bold text-google-blue">IT</div>
+                        </div>
                         <h3 class="text-3xl font-bold mb-4 text-google-blue group-hover:scale-105 transition-transform">Implied Tech</h3>
                         <p class="text-gray-600 mb-6 leading-relaxed">
                             Where technology meets intuition. Cutting-edge solutions that understand your needs before you do, powered by advanced AI and seamless user experiences.
@@ -310,7 +370,7 @@
                             <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium">Intuitive</span>
                             <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium">Advanced</span>
                         </div>
-                        <button class="google-btn bg-google-blue hover:bg-blue-600 text-white px-6 py-3 font-medium group-hover:scale-105 transition-all">
+                        <button class="google-btn btn-primary px-6 py-3 font-medium group-hover:scale-105 transition-all">
                             Explore Platform →
                         </button>
                     </div>
@@ -320,7 +380,9 @@
                 <div class="google-card overflow-hidden group">
                     <div class="h-4 google-red w-full"></div>
                     <div class="p-8">
-                        <img src="2.png" alt="Pixel Byte Logo" class="w-full h-48 rounded-2xl mb-6 object-cover">
+                        <div class="w-full h-48 bg-gradient-to-br from-red-100 to-red-200 rounded-2xl mb-6 flex items-center justify-center">
+                            <div class="text-4xl font-bold text-google-red">PB</div>
+                        </div>
                         <h3 class="text-3xl font-bold mb-4 text-google-red group-hover:scale-105 transition-transform">Pixel Byte</h3>
                         <p class="text-gray-600 mb-6 leading-relaxed">
                             Digital artistry meets technical precision. A creative playground where every pixel tells a story and every byte carries infinite possibilities for visual innovation.
@@ -330,7 +392,7 @@
                             <span class="bg-pink-100 text-pink-700 px-4 py-2 rounded-full text-sm font-medium">Visual</span>
                             <span class="bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium">Innovative</span>
                         </div>
-                        <button class="google-btn bg-google-red hover:bg-red-600 text-white px-6 py-3 font-medium group-hover:scale-105 transition-all">
+                        <button class="google-btn" style="background: linear-gradient(135deg, #ea4335 0%, #d23421 100%); color: white; border: 2px solid transparent;" class="px-6 py-3 font-medium group-hover:scale-105 transition-all">
                             Explore Platform →
                         </button>
                     </div>
@@ -340,7 +402,9 @@
                 <div class="google-card overflow-hidden group">
                     <div class="h-4 google-green w-full"></div>
                     <div class="p-8">
-                        <img src="3.png" alt="Pixel Byte Logo" class="w-full h-48 rounded-2xl mb-6 object-cover">
+                        <div class="w-full h-48 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl mb-6 flex items-center justify-center">
+                            <div class="text-4xl font-bold text-google-green">NE</div>
+                        </div>
                         <h3 class="text-3xl font-bold mb-4 text-google-green group-hover:scale-105 transition-transform">Nile Ecosystem</h3>
                         <p class="text-gray-600 mb-6 leading-relaxed">
                             The confluence of all digital streams. A comprehensive ecosystem that connects, nurtures, and amplifies content across all platforms in perfect harmony.
@@ -350,7 +414,7 @@
                             <span class="bg-teal-100 text-teal-700 px-4 py-2 rounded-full text-sm font-medium">Scalable</span>
                             <span class="bg-cyan-100 text-cyan-700 px-4 py-2 rounded-full text-sm font-medium">Connected</span>
                         </div>
-                        <button class="google-btn bg-google-green hover:bg-green-600 text-white px-6 py-3 font-medium group-hover:scale-105 transition-all">
+                        <button class="google-btn" style="background: linear-gradient(135deg, #34a853 0%, #2d8f47 100%); color: white; border: 2px solid transparent;" class="px-6 py-3 font-medium group-hover:scale-105 transition-all">
                             Explore Platform →
                         </button>
                     </div>
@@ -380,10 +444,10 @@
             </div>
             
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button class="google-btn bg-google-blue hover:bg-blue-600 text-white px-8 py-4 text-lg font-medium">
+                <button class="google-btn btn-primary px-8 py-4 text-lg font-medium">
                     Get In Touch
                 </button>
-                <button class="google-btn bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 px-8 py-4 text-lg font-medium">
+                <button class="google-btn btn-secondary px-8 py-4 text-lg font-medium">
                     View Portfolio
                 </button>
             </div>
@@ -433,7 +497,7 @@
         
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
+                if (:entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
                 }
@@ -485,24 +549,25 @@
             const shapes = document.querySelectorAll('.floating-shape');
             
             shapes.forEach((shape, index) => {
-    const speed = 0.02 + (index * 0.01);
-    const currentTransform = shape.style.transform || '';
-    const yOffset = Math.sin(scrolled * speed) * 10;
-    
-    // Add subtle floating motion based on scroll
-    if (!shape.matches(':hover')) {
-        shape.style.transform = currentTransform + ` translateY(${yOffset}px)`;
-    }
-});// Google-style card interaction effects
+                const speed = 0.02 + (index * 0.01);
+                const currentTransform = shape.style.transform || '';
+                const yOffset = Math.sin(scrolled * speed) * 10;
+                
+                // Add subtle floating motion based on scroll
+                if (!shape.matches(':hover')) {
+                    shape.style.transform = currentTransform + ` translateY(${yOffset}px)`;
+                }
+            });
+        });
+        
+        // Google-style card interaction effects
         const cards = document.querySelectorAll('.google-card');
         cards.forEach(card => {
             card.addEventListener('mouseenter', () => {
-                // Add subtle glow effect
                 card.style.boxShadow = '0 12px 40px rgba(66, 133, 244, 0.15)';
             });
             
             card.addEventListener('mouseleave', () => {
-                // Reset to original shadow
                 card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
             });
         });
@@ -534,7 +599,7 @@
             }, 2000);
         }, 5000);
         
-        // Google-style button ripple effect
+        // Enhanced Google-style button ripple effect
         document.querySelectorAll('.google-btn').forEach(button => {
             button.addEventListener('click', function(e) {
                 const ripple = document.createElement('span');
@@ -554,6 +619,7 @@
                     transform: scale(0);
                     animation: ripple 0.6s ease-out;
                     pointer-events: none;
+                    z-index: 1;
                 `;
                 
                 this.style.position = 'relative';
@@ -565,18 +631,6 @@
                 }, 600);
             });
         });
-        
-        // CSS for ripple animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    transform: scale(2);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
