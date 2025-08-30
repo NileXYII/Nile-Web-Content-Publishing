@@ -5,27 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nile Web Content Publishing</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&family=Product+Sans:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         
-        * {
-            font-family: 'Google Sans', 'Product Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-        
-        /* Google's signature colors */
+        /* Google Colors */
         .google-blue { background-color: #4285f4; }
         .google-red { background-color: #ea4335; }
         .google-yellow { background-color: #fbbc04; }
         .google-green { background-color: #34a853; }
         .google-purple { background-color: #9333ea; }
         .google-orange { background-color: #ff6d01; }
-        
         .text-google-blue { color: #4285f4; }
         .text-google-red { color: #ea4335; }
-        .text-google-yellow { color: #fbbc04; }
         .text-google-green { color: #34a853; }
         
-        /* Floating shapes animation - MADE BIGGER */
+        /* Animations */
         .floating-shape {
             position: absolute;
             border-radius: 50%;
@@ -34,17 +29,8 @@
             z-index: 1;
         }
         
-        .floating-shape.triangle {
-            width: 0;
-            height: 0;
-            border-radius: 0;
-            animation: floatRotate 25s infinite linear;
-        }
-        
-        .floating-shape.square {
-            border-radius: 12px;
-            animation: floatBounce 18s infinite ease-in-out;
-        }
+        .floating-shape.triangle { border-radius: 0; animation: floatRotate 25s infinite linear; }
+        .floating-shape.square { border-radius: 12px; animation: floatBounce 18s infinite ease-in-out; }
         
         @keyframes float {
             0% { transform: translateX(-100px) translateY(0px) rotate(0deg); }
@@ -69,7 +55,7 @@
             75% { transform: translateY(-10px) rotate(3deg); }
         }
         
-        /* Google-style cards */
+        /* Cards & Buttons */
         .google-card {
             background: white;
             border-radius: 16px;
@@ -83,7 +69,6 @@
             transform: translateY(-4px);
         }
         
-        /* IMPROVED Google-style buttons with better visibility */
         .google-btn {
             border-radius: 24px;
             font-weight: 500;
@@ -106,17 +91,6 @@
             transform: translateY(-2px);
         }
         
-        .google-btn:focus {
-            outline: 2px solid #4285f4;
-            outline-offset: 2px;
-        }
-        
-        .google-btn:active {
-            transform: translateY(0px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        
-        /* Enhanced button styles for better visibility */
         .btn-primary {
             background: linear-gradient(135deg, #4285f4 0%, #3367d6 100%);
             color: white;
@@ -138,31 +112,21 @@
             background: #f8f9fa;
             border-color: #4285f4;
             color: #4285f4;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
         }
         
-        /* Slide in animations */
+        /* Slide animations */
         @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
-        .slide-in-up {
-            animation: slideInUp 0.8s ease-out forwards;
-        }
-        
+        .slide-in-up { animation: slideInUp 0.8s ease-out forwards; }
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
         .delay-300 { animation-delay: 0.3s; }
         .delay-400 { animation-delay: 0.4s; }
         
-        /* Google's colorful text */
+        /* Google text gradient */
         .google-text {
             background: linear-gradient(45deg, #4285f4, #ea4335, #fbbc04, #34a853, #4285f4);
             -webkit-background-clip: text;
@@ -177,11 +141,7 @@
             50% { background-position: 100% 50%; }
         }
         
-        /* Google dots loader animation */
-        .google-dots {
-            display: inline-block;
-        }
-        
+        /* Google dots */
         .google-dots span {
             display: inline-block;
             width: 8px;
@@ -201,7 +161,7 @@
             50% { transform: scale(1.5); opacity: 0.5; }
         }
         
-        /* Search bar style */
+        /* Search bar */
         .google-search {
             border-radius: 24px;
             border: 1px solid #dfe1e5;
@@ -213,40 +173,99 @@
             box-shadow: 0 2px 8px 1px rgba(64,60,67,.24);
         }
         
-        /* Ripple effect for buttons */
-        @keyframes ripple {
-            to {
-                transform: scale(2);
-                opacity: 0;
+        /* Mobile Bottom Navigation */
+        .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid #e8eaed;
+            z-index: 50;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-nav.hidden {
+            transform: translateY(100%);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 4px;
+            color: #5f6368;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item.active {
+            color: #4285f4;
+            background: rgba(66, 133, 244, 0.08);
+        }
+        
+        .nav-item:hover {
+            background: rgba(66, 133, 244, 0.04);
+            color: #4285f4;
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 2px;
+            transition: transform 0.2s ease;
+        }
+        
+        .nav-item.active .nav-icon {
+            transform: scale(1.1);
+        }
+        
+        .nav-text {
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Hide mobile nav on desktop */
+        @media (min-width: 768px) {
+            .mobile-nav {
+                display: none;
             }
+        }
+        
+        /* Adjust content padding for mobile nav */
+        @media (max-width: 767px) {
+            body {
+                padding-bottom: 80px;
+            }
+        }
+        
+        /* Ripple effect */
+        @keyframes ripple {
+            to { transform: scale(2); opacity: 0; }
         }
     </style>
 </head>
 <body class="bg-white text-gray-800 overflow-x-hidden relative">
     
-    <!-- Floating Shapes Background - MADE BIGGER -->
+    <!-- Floating Shapes Background -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <!-- Circles - INCREASED SIZES -->
         <div class="floating-shape google-blue w-24 h-24" style="top: 10%; left: 5%; animation-delay: 0s;"></div>
         <div class="floating-shape google-red w-20 h-20" style="top: 20%; right: 15%; animation-delay: -3s;"></div>
         <div class="floating-shape google-yellow w-32 h-32" style="top: 50%; left: 10%; animation-delay: -6s;"></div>
         <div class="floating-shape google-green w-28 h-28" style="top: 70%; right: 20%; animation-delay: -9s;"></div>
-        <div class="floating-shape google-purple w-26 h-26" style="top: 30%; right: 5%; animation-delay: -12s;"></div>
-        <div class="floating-shape google-orange w-18 h-18" style="top: 80%; left: 30%; animation-delay: -15s;"></div>
         
-        <!-- Triangles - MADE BIGGER -->
         <div class="floating-shape triangle" style="top: 15%; left: 70%; animation-delay: -2s; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 40px solid #4285f4;"></div>
         <div class="floating-shape triangle" style="top: 60%; left: 80%; animation-delay: -8s; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 35px solid #ea4335;"></div>
-        <div class="floating-shape triangle" style="top: 40%; left: 20%; animation-delay: -14s; border-left: 30px solid transparent; border-right: 30px solid transparent; border-bottom: 50px solid #34a853;"></div>
         
-        <!-- Squares - MADE BIGGER -->
         <div class="floating-shape square google-yellow w-20 h-20" style="top: 25%; left: 60%; animation-delay: -4s;"></div>
         <div class="floating-shape square google-blue w-24 h-24" style="top: 65%; left: 50%; animation-delay: -10s;"></div>
-        <div class="floating-shape square google-red w-16 h-16" style="top: 85%; right: 40%; animation-delay: -16s;"></div>
-        
-        <!-- Additional shapes for more visual interest -->
-        <div class="floating-shape google-green w-22 h-22" style="top: 5%; right: 30%; animation-delay: -18s;"></div>
-        <div class="floating-shape square google-purple w-18 h-18" style="top: 90%; left: 60%; animation-delay: -20s;"></div>
     </div>
     
     <!-- Navigation -->
@@ -257,15 +276,16 @@
                 <span class="text-gray-600 ml-2">Web</span>
             </div>
             <div class="hidden md:flex space-x-8">
+                <a href="#home" class="text-gray-700 hover:text-google-blue transition-colors font-medium">Home</a>
                 <a href="#about" class="text-gray-700 hover:text-google-blue transition-colors font-medium">About</a>
-                <a href="#websites" class="text-gray-700 hover:text-google-red transition-colors font-medium">Websites</a>
+                <a href="#websites" class="text-gray-700 hover:text-google-red transition-colors font-medium">Features</a>
                 <a href="#contact" class="text-gray-700 hover:text-google-green transition-colors font-medium">Contact</a>
             </div>
         </div>
     </nav>
     
     <!-- Hero Section -->
-    <div class="min-h-screen flex items-center justify-center relative z-10 px-6">
+    <section id="home" class="min-h-screen flex items-center justify-center relative z-10 px-6">
         <div class="text-center max-w-5xl mx-auto">
             <h1 class="text-7xl md:text-9xl font-bold mb-8 slide-in-up">
                 <span class="block google-text">Nile Web</span>
@@ -284,18 +304,43 @@
             </div>
             <div class="mt-8 slide-in-up delay-400">
                 <div class="google-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                    <span></span><span></span><span></span><span></span>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
     
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-gray-50 relative z-10">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-5xl font-bold mb-6">
+                About <span class="google-text">Nile Web</span>
+            </h2>
+            <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                We're pioneers in digital content innovation, creating platforms that merge cutting-edge technology with intuitive design to deliver exceptional user experiences.
+            </p>
+            <div class="grid md:grid-cols-3 gap-8 mt-12">
+                <div class="google-card p-6">
+                    <div class="text-4xl mb-4">🚀</div>
+                    <h3 class="text-xl font-bold mb-2">Innovation</h3>
+                    <p class="text-gray-600">Pushing boundaries with advanced AI and modern web technologies</p>
+                </div>
+                <div class="google-card p-6">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h3 class="text-xl font-bold mb-2">Design</h3>
+                    <p class="text-gray-600">Creating beautiful, intuitive interfaces that users love</p>
+                </div>
+                <div class="google-card p-6">
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h3 class="text-xl font-bold mb-2">Performance</h3>
+                    <p class="text-gray-600">Lightning-fast, scalable solutions for the modern web</p>
+                </div>
+            </div>
+        </div>
+    </section>
     
-    <!-- Websites Section -->
-    <section id="websites" class="py24 relative z-10 bg-white">
+    <!-- Features/Websites Section -->
+    <section id="websites" class="py-24 relative z-10 bg-white">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-20">
                 <h2 class="text-5xl md:text-6xl font-bold mb-6">
@@ -307,67 +352,49 @@
             </div>
             
             <div class="grid lg:grid-cols-3 gap-8">
-                <!-- Implied Tech -->
                 <div class="google-card overflow-hidden group">
                     <div class="h-4 google-blue w-full"></div>
                     <div class="p-8">
                         <div class="w-full h-48 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl mb-6 flex items-center justify-center">
                             <div class="text-4xl font-bold text-google-blue">IT</div>
                         </div>
-                        <h3 class="text-3xl font-bold mb-4 text-google-blue group-hover:scale-105 transition-transform">Implied Tech</h3>
+                        <h3 class="text-3xl font-bold mb-4 text-google-blue">Implied Tech</h3>
                         <p class="text-gray-600 mb-6 leading-relaxed">
-                            Where technology meets intuition. Cutting-edge solutions that understand your needs before you do, powered by advanced AI and seamless user experiences.
+                            Where technology meets intuition. Cutting-edge solutions that understand your needs before you do.
                         </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">AI-Powered</span>
-                            <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium">Intuitive</span>
-                            <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium">Advanced</span>
-                        </div>
-                        <button class="google-btn btn-primary px-6 py-3 font-medium group-hover:scale-105 transition-all">
+                        <button class="google-btn btn-primary px-6 py-3 font-medium">
                             Explore Platform →
                         </button>
                     </div>
                 </div>
                 
-                <!-- Pixel Byte -->
                 <div class="google-card overflow-hidden group">
                     <div class="h-4 google-red w-full"></div>
                     <div class="p-8">
                         <div class="w-full h-48 bg-gradient-to-br from-red-100 to-red-200 rounded-2xl mb-6 flex items-center justify-center">
                             <div class="text-4xl font-bold text-google-red">PB</div>
                         </div>
-                        <h3 class="text-3xl font-bold mb-4 text-google-red group-hover:scale-105 transition-transform">Pixel Byte</h3>
+                        <h3 class="text-3xl font-bold mb-4 text-google-red">Pixel Byte</h3>
                         <p class="text-gray-600 mb-6 leading-relaxed">
-                            Digital artistry meets technical precision. A creative playground where every pixel tells a story and every byte carries infinite possibilities for visual innovation.
+                            Digital artistry meets technical precision. A creative playground for visual innovation.
                         </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium">Creative</span>
-                            <span class="bg-pink-100 text-pink-700 px-4 py-2 rounded-full text-sm font-medium">Visual</span>
-                            <span class="bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium">Innovative</span>
-                        </div>
-                        <button class="google-btn" style="background: linear-gradient(135deg, #ea4335 0%, #d23421 100%); color: white; border: 2px solid transparent;" class="px-6 py-3 font-medium group-hover:scale-105 transition-all">
+                        <button class="google-btn px-6 py-3 font-medium text-white" style="background: linear-gradient(135deg, #ea4335 0%, #d23421 100%);">
                             Explore Platform →
                         </button>
                     </div>
                 </div>
                 
-                <!-- Nile Ecosystem -->
                 <div class="google-card overflow-hidden group">
                     <div class="h-4 google-green w-full"></div>
                     <div class="p-8">
                         <div class="w-full h-48 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl mb-6 flex items-center justify-center">
                             <div class="text-4xl font-bold text-google-green">NE</div>
                         </div>
-                        <h3 class="text-3xl font-bold mb-4 text-google-green group-hover:scale-105 transition-transform">Nile Ecosystem</h3>
+                        <h3 class="text-3xl font-bold mb-4 text-google-green">Nile Ecosystem</h3>
                         <p class="text-gray-600 mb-6 leading-relaxed">
-                            The confluence of all digital streams. A comprehensive ecosystem that connects, nurtures, and amplifies content across all platforms in perfect harmony.
+                            The confluence of all digital streams. A comprehensive ecosystem that connects and amplifies content.
                         </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium">Integrated</span>
-                            <span class="bg-teal-100 text-teal-700 px-4 py-2 rounded-full text-sm font-medium">Scalable</span>
-                            <span class="bg-cyan-100 text-cyan-700 px-4 py-2 rounded-full text-sm font-medium">Connected</span>
-                        </div>
-                        <button class="google-btn" style="background: linear-gradient(135deg, #34a853 0%, #2d8f47 100%); color: white; border: 2px solid transparent;" class="px-6 py-3 font-medium group-hover:scale-105 transition-all">
+                        <button class="google-btn px-6 py-3 font-medium text-white" style="background: linear-gradient(135deg, #34a853 0%, #2d8f47 100%);">
                             Explore Platform →
                         </button>
                     </div>
@@ -385,10 +412,9 @@
                 <span class="text-google-green">Presence</span>?
             </h2>
             <p class="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-                Join the future of digital content publishing. Let's create something extraordinary together with Google-quality innovation.
+                Join the future of digital content publishing. Let's create something extraordinary together.
             </p>
             
-            <!-- Google-style search bar -->
             <div class="google-search bg-white p-4 max-w-2xl mx-auto mb-8 flex items-center">
                 <svg class="w-6 h-6 text-gray-400 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -397,9 +423,9 @@
             </div>
             
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="contact.html" class="google-btn btn-primary px-8 py-4 text-lg font-medium">
-    Get In Touch
-                </a>
+                <button class="google-btn btn-primary px-8 py-4 text-lg font-medium">
+                    Get In Touch
+                </button>
                 <button class="google-btn btn-secondary px-8 py-4 text-lg font-medium">
                     View Portfolio
                 </button>
@@ -422,42 +448,90 @@
                 </div>
             </div>
             <div class="text-center text-gray-500">
-                <p>&copy; 2025 Nile Web Content Publishing. Crafting the future of digital content with Google-inspired innovation.</p>
+                <p>&copy; 2025 Nile Web Content Publishing. Crafting the future of digital content.</p>
             </div>
         </div>
     </footer>
     
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav md:hidden">
+        <div class="flex justify-around items-center py-2 px-4">
+            <a href="#home" class="nav-item active" data-section="home">
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                <span class="nav-text">Home</span>
+            </a>
+            
+            <a href="#about" class="nav-item" data-section="about">
+                <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="nav-text">About</span>
+            </a>
+            
+            <a href="#websites" class="nav-item" data-section="websites">
+                <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+                <span class="nav-text">Features</span>
+            </a>
+            
+            <a href="#contact" class="nav-item" data-section="contact">
+                <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                <span class="nav-text">Contact</span>
+            </a>
+        </div>
+    </nav>
+    
     <script>
-        // Smooth scrolling for navigation links
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
         
-        // Add scroll-triggered animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // Mobile nav active state
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('section[id]');
         
+        function updateActiveNav() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-section') === current) {
+                    item.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', updateActiveNav);
+        
+        // Scroll animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (:entry.isIntersecting) {
+                if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
         
-        // Observe elements for scroll animations
         document.querySelectorAll('.google-card').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(30px)';
@@ -465,21 +539,19 @@
             observer.observe(el);
         });
         
-        // Add dynamic hover effects to floating shapes
-        const shapes = document.querySelectorAll('.floating-shape');
-        shapes.forEach((shape, index) => {
+        // Floating shapes hover effect
+        document.querySelectorAll('.floating-shape').forEach(shape => {
             shape.addEventListener('mouseenter', () => {
                 shape.style.animationPlayState = 'paused';
                 shape.style.transform = 'scale(1.2)';
             });
-            
             shape.addEventListener('mouseleave', () => {
                 shape.style.animationPlayState = 'running';
                 shape.style.transform = 'scale(1)';
             });
         });
         
-        // Google-style typing effect for search placeholder
+        // Search placeholder rotation
         const searchInput = document.querySelector('input[placeholder]');
         const placeholders = [
             'Search for digital solutions...',
@@ -487,7 +559,6 @@
             'Discover innovative content tools...',
             'Explore our ecosystem...'
         ];
-        
         let currentPlaceholder = 0;
         setInterval(() => {
             if (searchInput && document.activeElement !== searchInput) {
@@ -496,63 +567,7 @@
             }
         }, 3000);
         
-        // Add subtle parallax effect to shapes based on scroll
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const shapes = document.querySelectorAll('.floating-shape');
-            
-            shapes.forEach((shape, index) => {
-                const speed = 0.02 + (index * 0.01);
-                const currentTransform = shape.style.transform || '';
-                const yOffset = Math.sin(scrolled * speed) * 10;
-                
-                // Add subtle floating motion based on scroll
-                if (!shape.matches(':hover')) {
-                    shape.style.transform = currentTransform + ` translateY(${yOffset}px)`;
-                }
-            });
-        });
-        
-        // Google-style card interaction effects
-        const cards = document.querySelectorAll('.google-card');
-        cards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.boxShadow = '0 12px 40px rgba(66, 133, 244, 0.15)';
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.15)';
-            });
-        });
-        
-        // Animate Google dots on page load
-        window.addEventListener('load', () => {
-            const dots = document.querySelectorAll('.google-dots span');
-            dots.forEach((dot, index) => {
-                setTimeout(() => {
-                    dot.style.transform = 'scale(1.2)';
-                    setTimeout(() => {
-                        dot.style.transform = 'scale(1)';
-                    }, 200);
-                }, index * 100);
-            });
-        });
-        
-        // Add random movement to shapes occasionally
-        setInterval(() => {
-            const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
-            const originalTransition = randomShape.style.transition;
-            
-            randomShape.style.transition = 'all 2s cubic-bezier(0.4, 0, 0.2, 1)';
-            randomShape.style.transform += ` scale(${0.8 + Math.random() * 0.4})`;
-            
-            setTimeout(() => {
-                randomShape.style.transition = originalTransition;
-                randomShape.style.transform = randomShape.style.transform.replace(/scale\([^)]*\)/, '');
-            }, 2000);
-        }, 5000);
-        
-        // Enhanced Google-style button ripple effect
+        // Button ripple effect
         document.querySelectorAll('.google-btn').forEach(button => {
             button.addEventListener('click', function(e) {
                 const ripple = document.createElement('span');
@@ -562,26 +577,60 @@
                 const y = e.clientY - rect.top - size / 2;
                 
                 ripple.style.cssText = `
-                    position: absolute;
-                    width: ${size}px;
-                    height: ${size}px;
-                    left: ${x}px;
-                    top: ${y}px;
-                    background: rgba(255, 255, 255, 0.3);
-                    border-radius: 50%;
-                    transform: scale(0);
-                    animation: ripple 0.6s ease-out;
-                    pointer-events: none;
-                    z-index: 1;
+                    position: absolute; width: ${size}px; height: ${size}px;
+                    left: ${x}px; top: ${y}px; background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%; transform: scale(0); animation: ripple 0.6s ease-out;
+                    pointer-events: none; z-index: 1;
                 `;
                 
                 this.style.position = 'relative';
                 this.style.overflow = 'hidden';
                 this.appendChild(ripple);
                 
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+        
+        // Hide mobile nav on scroll down, show on scroll up
+        let lastScrollY = window.scrollY;
+        const mobileNav = document.querySelector('.mobile-nav');
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                mobileNav.classList.add('hidden');
+            } else {
+                mobileNav.classList.remove('hidden');
+            }
+            
+            lastScrollY = currentScrollY;
+        });
+        
+        // Google dots animation on load
+        window.addEventListener('load', () => {
+            const dots = document.querySelectorAll('.google-dots span');
+            dots.forEach((dot, index) => {
                 setTimeout(() => {
-                    ripple.remove();
-                }, 600);
+                    dot.style.transform = 'scale(1.2)';
+                    setTimeout(() => dot.style.transform = 'scale(1)', 200);
+                }, index * 100);
+            });
+        });
+        
+        // Parallax effect for shapes
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const shapes = document.querySelectorAll('.floating-shape');
+            
+            shapes.forEach((shape, index) => {
+                const speed = 0.02 + (index * 0.01);
+                const yOffset = Math.sin(scrolled * speed) * 10;
+                
+                if (!shape.matches(':hover')) {
+                    const currentTransform = shape.style.transform || '';
+                    shape.style.transform = currentTransform + ` translateY(${yOffset}px)`;
+                }
             });
         });
     </script>
