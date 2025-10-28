@@ -1,0 +1,31 @@
+[
+  {
+    "id": "snapdragon-8-gen-3",
+    "name": "Snapdragon 8 Gen 3",
+    "launch": "2023",
+    "fabProcess": "4",
+    "socSize": "120",
+    "socket": "BGA",
+    "instructionSet": "ARMv9.2-A",
+    "numCores": "8",
+    "numThreads": "8",
+    "microarchitecture": "1x Cortex-X4 + 3x Cortex-A720 + 2x Cortex-A720 + 2x Cortex-A520",
+    "frequency": "3.3",
+    "l1CacheInstruction": "64",
+    "l1CacheData": "64",
+    "l2Cache": "12",
+    "memoryType": "LPDDR5X",
+    "memoryBusWidth": "64",
+    "memoryChannels": "4",
+    "maxMemorySize": "24",
+    "eccMemorySupported": "No",
+    "gpuName": "Adreno 750",
+    "gpuClock": "903",
+    "gpuCores": "6",
+    "gpuFP32": "2900",
+    "supportedWirelessWLANNetworks": "Wi-Fi 7 (802.11be), Wi-Fi 6E, Bluetooth 5.4",
+    "features": "AI Engine (Hexagon NPU), Snapdragon X75 5G Modem, Snapdragon Secure, Qualcomm Aqstic Audio, Quick Charge 5",
+    "maxScreenResolution": "4K @ 60Hz, QHD+ @ 144Hz",
+    "cameraSupport": "200MP single camera, Triple 36MP concurrent capture, 8K @ 30fps video"
+  }
+]
