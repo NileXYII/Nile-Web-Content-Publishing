@@ -1,0 +1,31 @@
+[
+  {
+    "id": "dimensity-9300",
+    "name": "MediaTek Dimensity 9300",
+    "launch": "2023",
+    "fabProcess": "4",
+    "socSize": "107",
+    "socket": "BGA",
+    "instructionSet": "ARMv9.2-A",
+    "numCores": "8",
+    "numThreads": "8",
+    "microarchitecture": "4x Cortex-X4 + 4x Cortex-A720",
+    "frequency": "3.25",
+    "l1CacheInstruction": "64",
+    "l1CacheData": "64",
+    "l2Cache": "10",
+    "memoryType": "LPDDR5X",
+    "memoryBusWidth": "64",
+    "memoryChannels": "4",
+    "maxMemorySize": "24",
+    "eccMemorySupported": "No",
+    "gpuName": "Mali-G720 Immortalis MC12",
+    "gpuClock": "1300",
+    "gpuCores": "12",
+    "gpuFP32": "2500",
+    "supportedWirelessWLANNetworks": "Wi-Fi 7 (802.11be), Wi-Fi 6E, Bluetooth 5.4",
+    "features": "APU 790 (AI Processing Unit), MediaTek 5G Modem, HyperEngine 7.0 Gaming, Imagiq 990 ISP, MiraVision 990 Display",
+    "maxScreenResolution": "4K @ 60Hz, WQHD+ @ 180Hz",
+    "cameraSupport": "320MP single camera, Triple 32MP concurrent capture, 8K @ 30fps video, 4K @ 120fps"
+  }
+]
