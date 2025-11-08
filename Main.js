@@ -126,7 +126,7 @@ function calcDetailedScore(a, b) {
         process: { a: parseInt(a.fabProcess) || 999, b: parseInt(b.fabProcess) || 999, higher: false },
         gpu: { a: parseInt(a.gpuCores) || 0, b: parseInt(b.gpuCores) || 0, higher: true },
         cache: { a: parseInt(a.l2Cache) || 0, b: parseInt(b.l2Cache) || 0, higher: true },
-        threads: { a: parseInt(a.numThreads) || 0, b: parseInt(a.numThreads) || 0, higher: true }
+        threads: { a: parseInt(a.numThreads) || 0, b: parseInt(b.numThreads) || 0, higher: true }
     };
     
     let score1 = 0, score2 = 0;
@@ -198,7 +198,10 @@ function destroyCategoryCharts() {
 // Create a category comparison chart
 function createCategoryChart(canvasId, categoryName, soc1, soc2, fields) {
     const ctx = document.getElementById(canvasId);
-    if (!ctx) return;
+    if (!ctx) {
+        console.log('Canvas not found:', canvasId);
+        return;
+    }
     
     // Destroy existing chart if it exists
     if (categoryCharts[canvasId]) {
@@ -214,7 +217,7 @@ function createCategoryChart(canvasId, categoryName, soc1, soc2, fields) {
         const v2 = parseFloat(soc2[k]) || 0;
         
         // Only add numeric fields to chart
-        if (c && v1 !== 0 && v2 !== 0) {
+        if (c && (v1 !== 0 || v2 !== 0)) {
             labels.push(l);
             
             // For "lower is better" metrics, invert the values for visualization
@@ -229,7 +232,12 @@ function createCategoryChart(canvasId, categoryName, soc1, soc2, fields) {
     });
     
     // Skip chart if no numeric data
-    if (labels.length === 0) return;
+    if (labels.length === 0) {
+        console.log('No numeric data for chart:', canvasId);
+        return;
+    }
+    
+    console.log('Creating chart:', canvasId, 'with', labels.length, 'metrics');
     
     categoryCharts[canvasId] = new Chart(ctx, {
         type: 'bar',
@@ -337,7 +345,7 @@ function showComparison(soc1, soc2, scores) {
 
     let html = '<div class="bg-white rounded-2xl shadow-xl overflow-hidden">';
     
-    specs.forEach(({cat, id, fields}) => {
+    specs.forEach(({cat, id, fields}, index) => {
         html += `<div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-4">
             <div class="flex items-center justify-center">
                 <span class="mr-3">${getIconSVG(cat)}</span>
@@ -380,8 +388,14 @@ function showComparison(soc1, soc2, scores) {
         
         html += `</tbody></table>
         </div>
-        <div class="p-6 bg-gray-50">
-            <div class="bg-white rounded-xl shadow-md p-4" style="height: 250px;">
+        <div class="p-6 bg-gray-50 border-b-4 border-purple-100">
+            <div class="flex items-center gap-2 mb-3">
+                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <h4 class="text-lg font-bold text-gray-800">${cat} Comparison</h4>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-4" style="height: 280px;">
                 <canvas id="${id}"></canvas>
             </div>
         </div>`;
@@ -390,12 +404,13 @@ function showComparison(soc1, soc2, scores) {
     html += '</div>';
     document.getElementById('result').innerHTML = html;
     
-    // Create charts after DOM is updated
+    // Create charts after DOM is updated with a longer delay
     setTimeout(() => {
+        console.log('Starting chart creation...');
         specs.forEach(({cat, id, fields}) => {
             createCategoryChart(id, cat, soc1, soc2, fields);
         });
-    }, 100);
+    }, 200);
 }
 
 // Show performance radar chart
