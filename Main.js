@@ -264,30 +264,77 @@ function showComparison(soc1, soc2, scores) {
     document.getElementById('result').innerHTML = html;
 }
 
-// Show performance radar chart
+
+                
+                        
+                // Enhanced performance radar chart with animations and better styling
 function showPerformanceChart(soc1, soc2, scores) {
     const ctx = document.getElementById('performanceChart');
     document.getElementById('chartSection').classList.remove('hidden');
     
     if (chart) chart.destroy();
     
-    const categories = ['Frequency', 'Cores', 'Process', 'GPU', 'Cache', 'Threads'];
+    const categories = ['Max Frequency', 'CPU Cores', 'Process Node', 'GPU Cores', 'L2 Cache', 'Threads'];
+    
+    // Normalize data for better visualization
+    const normalize = (val, max) => (val / max) * 100;
+    
+    const freq1 = parseFloat(soc1.frequency) || 0;
+    const freq2 = parseFloat(soc2.frequency) || 0;
+    const maxFreq = Math.max(freq1, freq2, 1);
+    
+    const cores1 = parseInt(soc1.numCores) || 0;
+    const cores2 = parseInt(soc2.numCores) || 0;
+    const maxCores = Math.max(cores1, cores2, 1);
+    
+    const proc1 = parseInt(soc1.fabProcess) || 999;
+    const proc2 = parseInt(soc2.fabProcess) || 999;
+    const maxProc = Math.max(proc1, proc2, 1);
+    
+    const gpu1 = parseInt(soc1.gpuCores) || 0;
+    const gpu2 = parseInt(soc2.gpuCores) || 0;
+    const maxGpu = Math.max(gpu1, gpu2, 1);
+    
+    const cache1 = parseInt(soc1.l2Cache) || 0;
+    const cache2 = parseInt(soc2.l2Cache) || 0;
+    const maxCache = Math.max(cache1, cache2, 1);
+    
+    const threads1 = parseInt(soc1.numThreads) || 0;
+    const threads2 = parseInt(soc2.numThreads) || 0;
+    const maxThreads = Math.max(threads1, threads2, 1);
+    
     const data1 = [
-        parseFloat(soc1.frequency) || 0,
-        parseInt(soc1.numCores) || 0,
-        100 - (parseInt(soc1.fabProcess) || 0),
-        parseInt(soc1.gpuCores) || 0,
-        parseInt(soc1.l2Cache) || 0,
-        parseInt(soc1.numThreads) || 0
+        normalize(freq1, maxFreq),
+        normalize(cores1, maxCores),
+        normalize(maxProc - proc1, maxProc), // Inverted - lower is better
+        normalize(gpu1, maxGpu),
+        normalize(cache1, maxCache),
+        normalize(threads1, maxThreads)
     ];
+    
     const data2 = [
-        parseFloat(soc2.frequency) || 0,
-        parseInt(soc2.numCores) || 0,
-        100 - (parseInt(soc2.fabProcess) || 0),
-        parseInt(soc2.gpuCores) || 0,
-        parseInt(soc2.l2Cache) || 0,
-        parseInt(soc2.numThreads) || 0
+        normalize(freq2, maxFreq),
+        normalize(cores2, maxCores),
+        normalize(maxProc - proc2, maxProc), // Inverted - lower is better
+        normalize(gpu2, maxGpu),
+        normalize(cache2, maxCache),
+        normalize(threads2, maxThreads)
     ];
+    
+    // Create gradient fills
+    const createGradient = (ctx, color1, color2) => {
+        const gradient = ctx.createRadialGradient(
+            ctx.canvas.width / 2, 
+            ctx.canvas.height / 2, 
+            0,
+            ctx.canvas.width / 2, 
+            ctx.canvas.height / 2, 
+            ctx.canvas.width / 2
+        );
+        gradient.addColorStop(0, color1);
+        gradient.addColorStop(1, color2);
+        return gradient;
+    };
     
     chart = new Chart(ctx, {
         type: 'radar',
@@ -297,70 +344,191 @@ function showPerformanceChart(soc1, soc2, scores) {
                 label: soc1.name,
                 data: data1,
                 borderColor: 'rgb(147, 51, 234)',
-                backgroundColor: 'rgba(147, 51, 234, 0.2)',
+                backgroundColor: 'rgba(147, 51, 234, 0.25)',
                 borderWidth: 3,
                 pointBackgroundColor: 'rgb(147, 51, 234)',
                 pointBorderColor: '#fff',
+                pointBorderWidth: 2,
                 pointHoverBackgroundColor: '#fff',
                 pointHoverBorderColor: 'rgb(147, 51, 234)',
-                pointRadius: 5,
-                pointHoverRadius: 7
+                pointHoverBorderWidth: 3,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                tension: 0.2
             },
             {
                 label: soc2.name,
                 data: data2,
                 borderColor: 'rgb(236, 72, 153)',
-                backgroundColor: 'rgba(236, 72, 153, 0.2)',
+                backgroundColor: 'rgba(236, 72, 153, 0.25)',
                 borderWidth: 3,
                 pointBackgroundColor: 'rgb(236, 72, 153)',
                 pointBorderColor: '#fff',
+                pointBorderWidth: 2,
                 pointHoverBackgroundColor: '#fff',
                 pointHoverBorderColor: 'rgb(236, 72, 153)',
-                pointRadius: 5,
-                pointHoverRadius: 7
+                pointHoverBorderWidth: 3,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                tension: 0.2
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: true,
+            animation: {
+                duration: 1500,
+                easing: 'easeInOutQuart',
+                onComplete: function() {
+                    // Optional: Add completion callback
+                }
+            },
             scales: {
                 r: {
-                    angleLines: { color: '#eee' },
-                    grid: { color: '#ddd' },
-                    suggestedMin: 0,
-                    suggestedMax: Math.max(...data1.concat(data2)) + 5,
+                    min: 0,
+                    max: 100,
+                    beginAtZero: true,
+                    angleLines: {
+                        color: 'rgba(0, 0, 0, 0.08)',
+                        lineWidth: 2
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)',
+                        circular: true,
+                        lineWidth: 1.5
+                    },
                     pointLabels: {
-                        color: '#555',
-                        font: { size: 14, weight: 'bold' }
+                        color: '#1f2937',
+                        font: {
+                            size: 13,
+                            weight: '600',
+                            family: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
+                        },
+                        padding: 15,
+                        callback: function(label) {
+                            // Add line breaks for long labels
+                            if (label.length > 12) {
+                                const words = label.split(' ');
+                                return words;
+                            }
+                            return label;
+                        }
                     },
                     ticks: {
-                        color: '#666',
-                        backdropColor: 'transparent'
+                        display: true,
+                        stepSize: 20,
+                        color: '#6b7280',
+                        backdropColor: 'rgba(255, 255, 255, 0.9)',
+                        backdropPadding: 4,
+                        font: {
+                            size: 11,
+                            weight: '500'
+                        },
+                        callback: function(value) {
+                            return value + '%';
+                        }
                     }
                 }
             },
             plugins: {
                 legend: {
                     position: 'top',
+                    align: 'center',
                     labels: {
-                        color: '#333',
-                        font: { size: 14, weight: 'bold' },
-                        padding: 15,
-                        usePointStyle: true
+                        color: '#1f2937',
+                        font: {
+                            size: 15,
+                            weight: '700',
+                            family: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
+                        },
+                        padding: 20,
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        boxWidth: 12,
+                        boxHeight: 12
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(0,0,0,0.8)',
-                    titleFont: { size: 14, weight: 'bold' },
-                    bodyFont: { size: 13 },
-                    padding: 12,
-                    cornerRadius: 8,
-                    displayColors: true
+                    enabled: true,
+                    backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                    titleColor: '#fff',
+                    bodyColor: '#e5e7eb',
+                    titleFont: {
+                        size: 15,
+                        weight: 'bold',
+                        family: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
+                    },
+                    bodyFont: {
+                        size: 13,
+                        weight: '500',
+                        family: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
+                    },
+                    padding: 16,
+                    cornerRadius: 12,
+                    displayColors: true,
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1,
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.dataset.label || '';
+                            const value = context.parsed.r;
+                            
+                            // Get actual values
+                            let actualValue = '';
+                            const index = context.dataIndex;
+                            const soc = context.datasetIndex === 0 ? soc1 : soc2;
+                            
+                            switch(index) {
+                                case 0:
+                                    actualValue = `${parseFloat(soc.frequency) || 0} GHz`;
+                                    break;
+                                case 1:
+                                    actualValue = `${parseInt(soc.numCores) || 0} cores`;
+                                    break;
+                                case 2:
+                                    actualValue = `${parseInt(soc.fabProcess) || 0}nm`;
+                                    break;
+                                case 3:
+                                    actualValue = `${parseInt(soc.gpuCores) || 0} cores`;
+                                    break;
+                                case 4:
+                                    actualValue = `${parseInt(soc.l2Cache) || 0} MB`;
+                                    break;
+                                case 5:
+                                    actualValue = `${parseInt(soc.numThreads) || 0} threads`;
+                                    break;
+                            }
+                            
+                            return `${label}: ${actualValue} (${value.toFixed(1)}%)`;
+                        },
+                        title: function(context) {
+                            return context[0].label;
+                        }
+                    }
+                },
+                // Add custom plugin for center text
+                title: {
+                    display: true,
+                    text: 'Performance Comparison (Normalized)',
+                    color: '#1f2937',
+                    font: {
+                        size: 18,
+                        weight: 'bold',
+                        family: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
+                    },
+                    padding: {
+                        top: 10,
+                        bottom: 20
+                    }
                 }
+            },
+            interaction: {
+                mode: 'point',
+                intersect: true
             }
         }
     });
-}
+                        }
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
