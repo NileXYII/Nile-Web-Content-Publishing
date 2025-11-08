@@ -1,4 +1,4 @@
-// SoC Comparator Pro - Main JavaScript
+// SoC Comparator Pro - Enhanced JavaScript with Category Charts
 // GitHub JSON Data URLs
 const JSON_URLS = [
     'https://raw.githubusercontent.com/NileXYII/Nile-Web-Content-Publishing/refs/heads/main/8gen3.json',
@@ -9,6 +9,7 @@ let socsData = [];
 let filteredSocs1 = [];
 let filteredSocs2 = [];
 let chart = null;
+let categoryCharts = {}; // Store multiple chart instances
 
 // Load SoC data from GitHub
 async function loadSoCs() {
@@ -125,7 +126,7 @@ function calcDetailedScore(a, b) {
         process: { a: parseInt(a.fabProcess) || 999, b: parseInt(b.fabProcess) || 999, higher: false },
         gpu: { a: parseInt(a.gpuCores) || 0, b: parseInt(b.gpuCores) || 0, higher: true },
         cache: { a: parseInt(a.l2Cache) || 0, b: parseInt(b.l2Cache) || 0, higher: true },
-        threads: { a: parseInt(a.numThreads) || 0, b: parseInt(b.numThreads) || 0, higher: true }
+        threads: { a: parseInt(a.numThreads) || 0, b: parseInt(a.numThreads) || 0, higher: true }
     };
     
     let score1 = 0, score2 = 0;
@@ -186,28 +187,148 @@ function getIconSVG(category) {
     return icons[category] || icons['General Info'];
 }
 
-// Show detailed comparison table
+// Destroy all existing category charts
+function destroyCategoryCharts() {
+    Object.values(categoryCharts).forEach(chart => {
+        if (chart) chart.destroy();
+    });
+    categoryCharts = {};
+}
+
+// Create a category comparison chart
+function createCategoryChart(canvasId, categoryName, soc1, soc2, fields) {
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return;
+    
+    // Destroy existing chart if it exists
+    if (categoryCharts[canvasId]) {
+        categoryCharts[canvasId].destroy();
+    }
+    
+    const labels = [];
+    const data1 = [];
+    const data2 = [];
+    
+    fields.forEach(({l, k, c}) => {
+        const v1 = parseFloat(soc1[k]) || 0;
+        const v2 = parseFloat(soc2[k]) || 0;
+        
+        // Only add numeric fields to chart
+        if (c && v1 !== 0 && v2 !== 0) {
+            labels.push(l);
+            
+            // For "lower is better" metrics, invert the values for visualization
+            if (c === 'l') {
+                data1.push(v1 > 0 ? 100 - v1 : 0);
+                data2.push(v2 > 0 ? 100 - v2 : 0);
+            } else {
+                data1.push(v1);
+                data2.push(v2);
+            }
+        }
+    });
+    
+    // Skip chart if no numeric data
+    if (labels.length === 0) return;
+    
+    categoryCharts[canvasId] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: soc1.name,
+                data: data1,
+                backgroundColor: 'rgba(147, 51, 234, 0.7)',
+                borderColor: 'rgb(147, 51, 234)',
+                borderWidth: 2,
+                borderRadius: 8,
+                barThickness: 'flex',
+                maxBarThickness: 60
+            },
+            {
+                label: soc2.name,
+                data: data2,
+                backgroundColor: 'rgba(236, 72, 153, 0.7)',
+                borderColor: 'rgb(236, 72, 153)',
+                borderWidth: 2,
+                borderRadius: 8,
+                barThickness: 'flex',
+                maxBarThickness: 60
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: '#333',
+                        font: { size: 12, weight: 'bold' },
+                        padding: 10,
+                        usePointStyle: true
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    titleFont: { size: 13, weight: 'bold' },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    cornerRadius: 6,
+                    displayColors: true
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    grid: {
+                        color: '#e5e7eb'
+                    },
+                    ticks: {
+                        color: '#666',
+                        font: { size: 11 }
+                    }
+                },
+                y: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#333',
+                        font: { size: 11, weight: 'bold' }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Show detailed comparison table with charts
 function showComparison(soc1, soc2, scores) {
+    // Destroy existing category charts
+    destroyCategoryCharts();
+    
     const specs = [
-        {cat: 'General Info', fields: [
+        {cat: 'General Info', id: 'generalChart', fields: [
             {l: 'Processor Name', k: 'name'},
             {l: 'Launch Date', k: 'launch'},
             {l: 'Process Node', k: 'fabProcess', u: 'nm', c: 'l'},
             {l: 'Die Size', k: 'socSize', u: 'mm²', c: 'l'}
         ]},
-        {cat: 'CPU Performance', fields: [
+        {cat: 'CPU Performance', id: 'cpuChart', fields: [
             {l: 'CPU Cores', k: 'numCores', c: 'h'},
             {l: 'CPU Threads', k: 'numThreads', c: 'h'},
             {l: 'Max Frequency', k: 'frequency', u: 'GHz', c: 'h'},
             {l: 'L2 Cache', k: 'l2Cache', u: 'MB', c: 'h'},
             {l: 'L3 Cache', k: 'l3Cache', u: 'MB', c: 'h'}
         ]},
-        {cat: 'Memory', fields: [
+        {cat: 'Memory', id: 'memoryChart', fields: [
             {l: 'Memory Type', k: 'memoryType'},
             {l: 'Max Memory', k: 'maxMemorySize', u: 'GB', c: 'h'},
             {l: 'Memory Channels', k: 'memoryChannels', c: 'h'}
         ]},
-        {cat: 'Graphics', fields: [
+        {cat: 'Graphics', id: 'graphicsChart', fields: [
             {l: 'GPU Model', k: 'gpuName'},
             {l: 'GPU Cores', k: 'gpuCores', c: 'h'},
             {l: 'GPU Clock', k: 'gpuClock', u: 'MHz', c: 'h'}
@@ -216,7 +337,7 @@ function showComparison(soc1, soc2, scores) {
 
     let html = '<div class="bg-white rounded-2xl shadow-xl overflow-hidden">';
     
-    specs.forEach(({cat, fields}) => {
+    specs.forEach(({cat, id, fields}) => {
         html += `<div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-4">
             <div class="flex items-center justify-center">
                 <span class="mr-3">${getIconSVG(cat)}</span>
@@ -257,84 +378,50 @@ function showComparison(soc1, soc2, scores) {
             </tr>`;
         });
         
-        html += '</tbody></table></div>';
+        html += `</tbody></table>
+        </div>
+        <div class="p-6 bg-gray-50">
+            <div class="bg-white rounded-xl shadow-md p-4" style="height: 250px;">
+                <canvas id="${id}"></canvas>
+            </div>
+        </div>`;
     });
     
     html += '</div>';
     document.getElementById('result').innerHTML = html;
+    
+    // Create charts after DOM is updated
+    setTimeout(() => {
+        specs.forEach(({cat, id, fields}) => {
+            createCategoryChart(id, cat, soc1, soc2, fields);
+        });
+    }, 100);
 }
 
-
-                
-                        
-                // Enhanced performance radar chart with animations and better styling
+// Show performance radar chart
 function showPerformanceChart(soc1, soc2, scores) {
     const ctx = document.getElementById('performanceChart');
     document.getElementById('chartSection').classList.remove('hidden');
     
     if (chart) chart.destroy();
     
-    const categories = ['Max Frequency', 'CPU Cores', 'Process Node', 'GPU Cores', 'L2 Cache', 'Threads'];
-    
-    // Normalize data for better visualization
-    const normalize = (val, max) => (val / max) * 100;
-    
-    const freq1 = parseFloat(soc1.frequency) || 0;
-    const freq2 = parseFloat(soc2.frequency) || 0;
-    const maxFreq = Math.max(freq1, freq2, 1);
-    
-    const cores1 = parseInt(soc1.numCores) || 0;
-    const cores2 = parseInt(soc2.numCores) || 0;
-    const maxCores = Math.max(cores1, cores2, 1);
-    
-    const proc1 = parseInt(soc1.fabProcess) || 999;
-    const proc2 = parseInt(soc2.fabProcess) || 999;
-    const maxProc = Math.max(proc1, proc2, 1);
-    
-    const gpu1 = parseInt(soc1.gpuCores) || 0;
-    const gpu2 = parseInt(soc2.gpuCores) || 0;
-    const maxGpu = Math.max(gpu1, gpu2, 1);
-    
-    const cache1 = parseInt(soc1.l2Cache) || 0;
-    const cache2 = parseInt(soc2.l2Cache) || 0;
-    const maxCache = Math.max(cache1, cache2, 1);
-    
-    const threads1 = parseInt(soc1.numThreads) || 0;
-    const threads2 = parseInt(soc2.numThreads) || 0;
-    const maxThreads = Math.max(threads1, threads2, 1);
-    
+    const categories = ['Frequency', 'Cores', 'Process', 'GPU', 'Cache', 'Threads'];
     const data1 = [
-        normalize(freq1, maxFreq),
-        normalize(cores1, maxCores),
-        normalize(maxProc - proc1, maxProc), // Inverted - lower is better
-        normalize(gpu1, maxGpu),
-        normalize(cache1, maxCache),
-        normalize(threads1, maxThreads)
+        parseFloat(soc1.frequency) || 0,
+        parseInt(soc1.numCores) || 0,
+        100 - (parseInt(soc1.fabProcess) || 0),
+        parseInt(soc1.gpuCores) || 0,
+        parseInt(soc1.l2Cache) || 0,
+        parseInt(soc1.numThreads) || 0
     ];
-    
     const data2 = [
-        normalize(freq2, maxFreq),
-        normalize(cores2, maxCores),
-        normalize(maxProc - proc2, maxProc), // Inverted - lower is better
-        normalize(gpu2, maxGpu),
-        normalize(cache2, maxCache),
-        normalize(threads2, maxThreads)
+        parseFloat(soc2.frequency) || 0,
+        parseInt(soc2.numCores) || 0,
+        100 - (parseInt(soc2.fabProcess) || 0),
+        parseInt(soc2.gpuCores) || 0,
+        parseInt(soc2.l2Cache) || 0,
+        parseInt(soc2.numThreads) || 0
     ];
-    
-    // Create gradient fills
-    const createGradient = (ctx, color1, color2) => {
-        const gradient = ctx.createRadialGradient(
-            ctx.canvas.width / 2, 
-            ctx.canvas.height / 2, 
-            0,
-            ctx.canvas.width / 2, 
-            ctx.canvas.height / 2, 
-            ctx.canvas.width / 2
-        );
-        gradient.addColorStop(0, color1);
-        gradient.addColorStop(1, color2);
-        return gradient;
-    };
     
     chart = new Chart(ctx, {
         type: 'radar',
@@ -344,191 +431,70 @@ function showPerformanceChart(soc1, soc2, scores) {
                 label: soc1.name,
                 data: data1,
                 borderColor: 'rgb(147, 51, 234)',
-                backgroundColor: 'rgba(147, 51, 234, 0.25)',
+                backgroundColor: 'rgba(147, 51, 234, 0.2)',
                 borderWidth: 3,
                 pointBackgroundColor: 'rgb(147, 51, 234)',
                 pointBorderColor: '#fff',
-                pointBorderWidth: 2,
                 pointHoverBackgroundColor: '#fff',
                 pointHoverBorderColor: 'rgb(147, 51, 234)',
-                pointHoverBorderWidth: 3,
-                pointRadius: 6,
-                pointHoverRadius: 8,
-                tension: 0.2
+                pointRadius: 5,
+                pointHoverRadius: 7
             },
             {
                 label: soc2.name,
                 data: data2,
                 borderColor: 'rgb(236, 72, 153)',
-                backgroundColor: 'rgba(236, 72, 153, 0.25)',
+                backgroundColor: 'rgba(236, 72, 153, 0.2)',
                 borderWidth: 3,
                 pointBackgroundColor: 'rgb(236, 72, 153)',
                 pointBorderColor: '#fff',
-                pointBorderWidth: 2,
                 pointHoverBackgroundColor: '#fff',
                 pointHoverBorderColor: 'rgb(236, 72, 153)',
-                pointHoverBorderWidth: 3,
-                pointRadius: 6,
-                pointHoverRadius: 8,
-                tension: 0.2
+                pointRadius: 5,
+                pointHoverRadius: 7
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: true,
-            animation: {
-                duration: 1500,
-                easing: 'easeInOutQuart',
-                onComplete: function() {
-                    // Optional: Add completion callback
-                }
-            },
             scales: {
                 r: {
-                    min: 0,
-                    max: 100,
-                    beginAtZero: true,
-                    angleLines: {
-                        color: 'rgba(0, 0, 0, 0.08)',
-                        lineWidth: 2
-                    },
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.1)',
-                        circular: true,
-                        lineWidth: 1.5
-                    },
+                    angleLines: { color: '#eee' },
+                    grid: { color: '#ddd' },
+                    suggestedMin: 0,
+                    suggestedMax: Math.max(...data1.concat(data2)) + 5,
                     pointLabels: {
-                        color: '#1f2937',
-                        font: {
-                            size: 13,
-                            weight: '600',
-                            family: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
-                        },
-                        padding: 15,
-                        callback: function(label) {
-                            // Add line breaks for long labels
-                            if (label.length > 12) {
-                                const words = label.split(' ');
-                                return words;
-                            }
-                            return label;
-                        }
+                        color: '#555',
+                        font: { size: 14, weight: 'bold' }
                     },
                     ticks: {
-                        display: true,
-                        stepSize: 20,
-                        color: '#6b7280',
-                        backdropColor: 'rgba(255, 255, 255, 0.9)',
-                        backdropPadding: 4,
-                        font: {
-                            size: 11,
-                            weight: '500'
-                        },
-                        callback: function(value) {
-                            return value + '%';
-                        }
+                        color: '#666',
+                        backdropColor: 'transparent'
                     }
                 }
             },
             plugins: {
                 legend: {
                     position: 'top',
-                    align: 'center',
                     labels: {
-                        color: '#1f2937',
-                        font: {
-                            size: 15,
-                            weight: '700',
-                            family: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
-                        },
-                        padding: 20,
-                        usePointStyle: true,
-                        pointStyle: 'circle',
-                        boxWidth: 12,
-                        boxHeight: 12
+                        color: '#333',
+                        font: { size: 14, weight: 'bold' },
+                        padding: 15,
+                        usePointStyle: true
                     }
                 },
                 tooltip: {
-                    enabled: true,
-                    backgroundColor: 'rgba(17, 24, 39, 0.95)',
-                    titleColor: '#fff',
-                    bodyColor: '#e5e7eb',
-                    titleFont: {
-                        size: 15,
-                        weight: 'bold',
-                        family: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
-                    },
-                    bodyFont: {
-                        size: 13,
-                        weight: '500',
-                        family: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
-                    },
-                    padding: 16,
-                    cornerRadius: 12,
-                    displayColors: true,
-                    borderColor: 'rgba(255, 255, 255, 0.1)',
-                    borderWidth: 1,
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.dataset.label || '';
-                            const value = context.parsed.r;
-                            
-                            // Get actual values
-                            let actualValue = '';
-                            const index = context.dataIndex;
-                            const soc = context.datasetIndex === 0 ? soc1 : soc2;
-                            
-                            switch(index) {
-                                case 0:
-                                    actualValue = `${parseFloat(soc.frequency) || 0} GHz`;
-                                    break;
-                                case 1:
-                                    actualValue = `${parseInt(soc.numCores) || 0} cores`;
-                                    break;
-                                case 2:
-                                    actualValue = `${parseInt(soc.fabProcess) || 0}nm`;
-                                    break;
-                                case 3:
-                                    actualValue = `${parseInt(soc.gpuCores) || 0} cores`;
-                                    break;
-                                case 4:
-                                    actualValue = `${parseInt(soc.l2Cache) || 0} MB`;
-                                    break;
-                                case 5:
-                                    actualValue = `${parseInt(soc.numThreads) || 0} threads`;
-                                    break;
-                            }
-                            
-                            return `${label}: ${actualValue} (${value.toFixed(1)}%)`;
-                        },
-                        title: function(context) {
-                            return context[0].label;
-                        }
-                    }
-                },
-                // Add custom plugin for center text
-                title: {
-                    display: true,
-                    text: 'Performance Comparison (Normalized)',
-                    color: '#1f2937',
-                    font: {
-                        size: 18,
-                        weight: 'bold',
-                        family: "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif"
-                    },
-                    padding: {
-                        top: 10,
-                        bottom: 20
-                    }
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 13 },
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: true
                 }
-            },
-            interaction: {
-                mode: 'point',
-                intersect: true
             }
         }
     });
-                        }
+}
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
