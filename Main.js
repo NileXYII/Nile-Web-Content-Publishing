@@ -1,5 +1,4 @@
-// SoC Comparator Pro - Enhanced JavaScript with Category Charts
-// GitHub JSON Data URLs
+// SoC Comparator Pro - Fixed JavaScript with Working Category Charts
 const JSON_URLS = [
     'https://raw.githubusercontent.com/NileXYII/Nile-Web-Content-Publishing/refs/heads/main/8gen3.json',
     'https://raw.githubusercontent.com/NileXYII/Nile-Web-Content-Publishing/refs/heads/main/9300.json',
@@ -9,7 +8,7 @@ let socsData = [];
 let filteredSocs1 = [];
 let filteredSocs2 = [];
 let chart = null;
-let categoryCharts = {}; // Store multiple chart instances
+let categoryCharts = {};
 
 // Load SoC data from GitHub
 async function loadSoCs() {
@@ -17,7 +16,6 @@ async function loadSoCs() {
         const responses = await Promise.all(JSON_URLS.map(url => fetch(url)));
         const data = await Promise.all(responses.map(r => r.json()));
         
-        // Merge all data sources
         data.forEach(d => socsData = socsData.concat(Array.isArray(d) ? d : d.socs || []));
         
         if (socsData.length === 0) throw new Error('No SoCs found in database');
@@ -34,14 +32,12 @@ async function loadSoCs() {
     }
 }
 
-// Show error message
 function showError(msg) {
     const el = document.getElementById('error');
     document.getElementById('errorText').textContent = msg;
     el.classList.remove('hidden');
 }
 
-// Populate dropdown selects
 function populateSelects(list1 = socsData, list2 = socsData) {
     const sel1 = document.getElementById('soc1');
     const sel2 = document.getElementById('soc2');
@@ -66,7 +62,6 @@ function populateSelects(list1 = socsData, list2 = socsData) {
     if (currentVal2) sel2.value = currentVal2;
 }
 
-// Search functionality for first SoC
 document.getElementById('search1').addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase();
     filteredSocs1 = socsData.filter(soc => 
@@ -75,7 +70,6 @@ document.getElementById('search1').addEventListener('input', (e) => {
     populateSelects(filteredSocs1, filteredSocs2);
 });
 
-// Search functionality for second SoC
 document.getElementById('search2').addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase();
     filteredSocs2 = socsData.filter(soc => 
@@ -84,7 +78,6 @@ document.getElementById('search2').addEventListener('input', (e) => {
     populateSelects(filteredSocs1, filteredSocs2);
 });
 
-// Swap button functionality
 document.getElementById('swapBtn').addEventListener('click', () => {
     const sel1 = document.getElementById('soc1');
     const sel2 = document.getElementById('soc2');
@@ -94,18 +87,15 @@ document.getElementById('swapBtn').addEventListener('click', () => {
     checkSelections();
 });
 
-// Check if both selections are made and different
 function checkSelections() {
     const v1 = document.getElementById('soc1').value;
     const v2 = document.getElementById('soc2').value;
     document.getElementById('compareBtn').disabled = !(v1 && v2 && v1 !== v2);
 }
 
-// Enable compare button when selections change
 document.getElementById('soc1').addEventListener('change', checkSelections);
 document.getElementById('soc2').addEventListener('change', checkSelections);
 
-// Compare button click handler
 document.getElementById('compareBtn').addEventListener('click', () => {
     const soc1 = socsData[document.getElementById('soc1').value];
     const soc2 = socsData[document.getElementById('soc2').value];
@@ -118,7 +108,6 @@ document.getElementById('compareBtn').addEventListener('click', () => {
     showPerformanceChart(soc1, soc2, scores);
 });
 
-// Calculate detailed comparison scores
 function calcDetailedScore(a, b) {
     const metrics = {
         frequency: { a: parseFloat(a.frequency) || 0, b: parseFloat(b.frequency) || 0, higher: true },
@@ -147,7 +136,6 @@ function calcDetailedScore(a, b) {
     return { score1, score2, breakdown, metrics };
 }
 
-// Show winner banner
 function showWinner(s1, s2, soc1, soc2) {
     const el = document.getElementById('winner');
     const textEl = document.getElementById('winnerText');
@@ -167,7 +155,6 @@ function showWinner(s1, s2, soc1, soc2) {
     el.classList.remove('hidden');
 }
 
-// Show score cards
 function showScoreCards(s1, s2, soc1, soc2) {
     document.getElementById('score1').textContent = s1;
     document.getElementById('score2').textContent = s2;
@@ -176,7 +163,6 @@ function showScoreCards(s1, s2, soc1, soc2) {
     document.getElementById('scoreCards').classList.remove('hidden');
 }
 
-// Get icon SVG for categories
 function getIconSVG(category) {
     const icons = {
         'General Info': '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>',
@@ -187,7 +173,6 @@ function getIconSVG(category) {
     return icons[category] || icons['General Info'];
 }
 
-// Destroy all existing category charts
 function destroyCategoryCharts() {
     Object.values(categoryCharts).forEach(chart => {
         if (chart) chart.destroy();
@@ -195,124 +180,125 @@ function destroyCategoryCharts() {
     categoryCharts = {};
 }
 
-// Create a category comparison chart
 function createCategoryChart(canvasId, categoryName, soc1, soc2, fields) {
-    const ctx = document.getElementById(canvasId);
-    if (!ctx) {
-        console.log('Canvas not found:', canvasId);
-        return;
-    }
-    
-    // Destroy existing chart if it exists
-    if (categoryCharts[canvasId]) {
-        categoryCharts[canvasId].destroy();
-    }
-    
-    const labels = [];
-    const data1 = [];
-    const data2 = [];
-    
-    fields.forEach(({l, k, c}) => {
-        const v1 = parseFloat(soc1[k]) || 0;
-        const v2 = parseFloat(soc2[k]) || 0;
+    // Wait for next tick to ensure DOM is ready
+    setTimeout(() => {
+        const ctx = document.getElementById(canvasId);
+        if (!ctx) {
+            console.error('Canvas not found:', canvasId);
+            return;
+        }
         
-        // Only add numeric fields to chart
-        if (c && (v1 !== 0 || v2 !== 0)) {
-            labels.push(l);
+        // Destroy existing chart if it exists
+        if (categoryCharts[canvasId]) {
+            categoryCharts[canvasId].destroy();
+        }
+        
+        const labels = [];
+        const data1 = [];
+        const data2 = [];
+        
+        fields.forEach(({l, k, c}) => {
+            const v1 = parseFloat(soc1[k]) || 0;
+            const v2 = parseFloat(soc2[k]) || 0;
             
-            // For "lower is better" metrics, invert the values for visualization
-            if (c === 'l') {
-                data1.push(v1 > 0 ? 100 - v1 : 0);
-                data2.push(v2 > 0 ? 100 - v2 : 0);
-            } else {
-                data1.push(v1);
-                data2.push(v2);
+            // Only add numeric fields to chart
+            if (c && (v1 !== 0 || v2 !== 0)) {
+                labels.push(l);
+                
+                // For "lower is better" metrics, invert the values for visualization
+                if (c === 'l') {
+                    data1.push(v1 > 0 ? 100 - v1 : 0);
+                    data2.push(v2 > 0 ? 100 - v2 : 0);
+                } else {
+                    data1.push(v1);
+                    data2.push(v2);
+                }
             }
+        });
+        
+        // Skip chart if no numeric data
+        if (labels.length === 0) {
+            console.log('No numeric data for chart:', canvasId);
+            return;
         }
-    });
-    
-    // Skip chart if no numeric data
-    if (labels.length === 0) {
-        console.log('No numeric data for chart:', canvasId);
-        return;
-    }
-    
-    console.log('Creating chart:', canvasId, 'with', labels.length, 'metrics');
-    
-    categoryCharts[canvasId] = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: soc1.name,
-                data: data1,
-                backgroundColor: 'rgba(147, 51, 234, 0.7)',
-                borderColor: 'rgb(147, 51, 234)',
-                borderWidth: 2,
-                borderRadius: 8,
-                barThickness: 'flex',
-                maxBarThickness: 60
+        
+        console.log('Creating chart:', canvasId, 'with', labels.length, 'metrics');
+        
+        categoryCharts[canvasId] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: soc1.name,
+                    data: data1,
+                    backgroundColor: 'rgba(147, 51, 234, 0.7)',
+                    borderColor: 'rgb(147, 51, 234)',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    barThickness: 'flex',
+                    maxBarThickness: 60
+                },
+                {
+                    label: soc2.name,
+                    data: data2,
+                    backgroundColor: 'rgba(236, 72, 153, 0.7)',
+                    borderColor: 'rgb(236, 72, 153)',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    barThickness: 'flex',
+                    maxBarThickness: 60
+                }]
             },
-            {
-                label: soc2.name,
-                data: data2,
-                backgroundColor: 'rgba(236, 72, 153, 0.7)',
-                borderColor: 'rgb(236, 72, 153)',
-                borderWidth: 2,
-                borderRadius: 8,
-                barThickness: 'flex',
-                maxBarThickness: 60
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'top',
-                    labels: {
-                        color: '#333',
-                        font: { size: 12, weight: 'bold' },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#333',
+                            font: { size: 12, weight: 'bold' },
+                            padding: 10,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleFont: { size: 13, weight: 'bold' },
+                        bodyFont: { size: 12 },
                         padding: 10,
-                        usePointStyle: true
+                        cornerRadius: 6,
+                        displayColors: true
                     }
                 },
-                tooltip: {
-                    backgroundColor: 'rgba(0,0,0,0.8)',
-                    titleFont: { size: 13, weight: 'bold' },
-                    bodyFont: { size: 12 },
-                    padding: 10,
-                    cornerRadius: 6,
-                    displayColors: true
-                }
-            },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    grid: {
-                        color: '#e5e7eb'
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#e5e7eb'
+                        },
+                        ticks: {
+                            color: '#666',
+                            font: { size: 11 }
+                        }
                     },
-                    ticks: {
-                        color: '#666',
-                        font: { size: 11 }
-                    }
-                },
-                y: {
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        color: '#333',
-                        font: { size: 11, weight: 'bold' }
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#333',
+                            font: { size: 11, weight: 'bold' }
+                        }
                     }
                 }
             }
-        }
-    });
+        });
+    }, 100);
 }
 
-// Show detailed comparison table with charts
 function showComparison(soc1, soc2, scores) {
     // Destroy existing category charts
     destroyCategoryCharts();
@@ -395,8 +381,10 @@ function showComparison(soc1, soc2, scores) {
                 </svg>
                 <h4 class="text-lg font-bold text-gray-800">${cat} Comparison</h4>
             </div>
-            <div class="bg-white rounded-xl shadow-md p-4" style="height: 280px;">
-                <canvas id="${id}"></canvas>
+            <div class="chart-wrapper">
+                <div class="category-chart-container">
+                    <canvas id="${id}"></canvas>
+                </div>
             </div>
         </div>`;
     });
@@ -404,16 +392,12 @@ function showComparison(soc1, soc2, scores) {
     html += '</div>';
     document.getElementById('result').innerHTML = html;
     
-    // Create charts after DOM is updated with a longer delay
-    setTimeout(() => {
-        console.log('Starting chart creation...');
-        specs.forEach(({cat, id, fields}) => {
-            createCategoryChart(id, cat, soc1, soc2, fields);
-        });
-    }, 200);
+    // Create charts after DOM is updated
+    specs.forEach(({cat, id, fields}) => {
+        createCategoryChart(id, cat, soc1, soc2, fields);
+    });
 }
 
-// Show performance radar chart
 function showPerformanceChart(soc1, soc2, scores) {
     const ctx = document.getElementById('performanceChart');
     document.getElementById('chartSection').classList.remove('hidden');
